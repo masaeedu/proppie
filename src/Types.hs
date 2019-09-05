@@ -1,7 +1,7 @@
 module Types where
 
-data Proxy m v b' a' a b
-  = Request a' (a  -> Proxy m v b' a' a b)
-  | Respond b  (b' -> Proxy m v b' a' a b)
-  | M (m (Proxy m v b' a' a b))
+data Proxy b' a' a b m v
+  = Request a' (a  -> Proxy b' a' a b m v)
+  | Respond b  (b' -> Proxy b' a' a b m v)
+  | M (m (Proxy b' a' a b m v))
   | Pure v

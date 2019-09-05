@@ -6,7 +6,7 @@ maintainer:          masaeedu@gmail.com
 build-type:          Simple
 
 library
-  build-depends:       base >=4.12 && <4.13, profunctors
+  build-depends:       base >=4.12 && <4.13, profunctors, either, semigroupoids
   exposed-modules:     Types ExtraClasses SYTC Newtypes
   default-extensions:  RankNTypes, QuantifiedConstraints, ImpredicativeTypes
   hs-source-dirs:      src

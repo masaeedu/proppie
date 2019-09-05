@@ -8,6 +8,6 @@ build-type:          Simple
 library
   build-depends:       base >=4.12 && <4.13, profunctors, either, semigroupoids, pipes
   exposed-modules:     ExtraClasses SYTC Newtypes Optics Test
-  default-extensions:  RankNTypes, QuantifiedConstraints, ImpredicativeTypes
+  default-extensions:  RankNTypes, QuantifiedConstraints, ImpredicativeTypes, TypeApplications
   hs-source-dirs:      src
   default-language:    Haskell2010

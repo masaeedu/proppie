@@ -17,7 +17,7 @@ server :: Monad m => Server a (Int, Int) m r
 server = forever $ respond (42, 42)
 
 server' :: Monad m => Server a Int m r
-server' = coerce $ re _1 $ Downstream $ server
+server' = coerce $ reLens _1 $ Downstream $ server
 
 client :: Client Int Int IO ()
 client = forever $ do

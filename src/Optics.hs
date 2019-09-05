@@ -1,5 +1,3 @@
-{-# LANGUAGE ConstraintKinds, ScopedTypeVariables #-}
-
 module Optics where
 
 import Data.Coerce
@@ -22,6 +20,9 @@ type Colens' s a = Colens s s a a
 
 type Prism s t a b = forall p. Choice p => Optic p s t a b
 type Prism' s a = Prism s s a a
+
+type Coprism s t a b = forall p. Cochoice p => Optic p s t a b
+type Coprism' s a = Coprism s s a a
 
 _1 :: Lens (a, x) (b, x) a b
 _1 = first'
@@ -47,14 +48,28 @@ instance Costrong p => Strong (Re p s t)
   where
   first' (Re r) = Re $ r . unfirst
 
+instance Choice p => Cochoice (Re p s t)
+  where
+  unleft (Re r) = Re $ r . left'
+
+instance Cochoice p => Choice (Re p s t)
+  where
+  left' (Re r) = Re $ r . unleft
+
 re' :: Optic (Re p a b) s t a b -> Optic p b a t s
 re' l = coerce $ l $ Re id
 
-re :: Lens s t a b -> Colens b a t s
-re l = re' l
+reLens :: Lens s t a b -> Colens b a t s
+reLens = re'
 
-re_1 :: Colens' a (a, b)
-re_1 = re _1
+rePrism :: Prism s t a b -> Coprism b a t s
+rePrism = re'
+
+reColens :: Colens s t a b -> Lens b a t s
+reColens = re'
+
+reCoprism :: Coprism s t a b -> Prism b a t s
+reCoprism = re'
 
 flipped :: Iso (a, b) (c, d) (b, a) (d, c)
 flipped = dimap swap swap

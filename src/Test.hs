@@ -13,22 +13,16 @@ import Data.Tuple
 import Optics
 import Newtypes
 
-flipped :: Iso (a, b) (c, d) (b, a) (d, c)
-flipped = dimap swap swap
+server :: Monad m => Server a (Int, Int) m r
+server = forever $ respond (42, 42)
 
-dumb :: Iso' (Int, String) Int
-dumb = dimap (\(i, _) -> i) (\i -> (i, show i))
+server' :: Monad m => Server a Int m r
+server' = coerce $ re _1 $ Downstream $ server
 
-dumber :: Iso' (String, Int) Int
-dumber = flipped . dumb
-
-server :: Functor m => Server a Int m r
-server = forever $ respond 42
-
-client :: Client (String, Int) (String, Int) IO ()
+client :: Client Int Int IO ()
 client = forever $ do
-  res <- request $ ("foo", 42)
+  res <- request $ 42
   liftIO $ print res
 
 main :: IO ()
-main = runEffect $ (coerce $ dumber $ Downstream $ server) >>~ const client
+main = runEffect $ server' >>~ const client

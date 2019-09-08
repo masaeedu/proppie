@@ -1,9 +1,6 @@
 module Newtypes where
 
 import Data.Profunctor
-import Data.Profunctor.Choice
-import Data.Profunctor.Strong
-import Control.Applicative
 
 import Data.Coerce
 

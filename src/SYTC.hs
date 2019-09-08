@@ -6,9 +6,7 @@ import Data.Tuple
 import Data.Either.Combinators
 import Control.Monad (forever, join)
 import qualified Data.Bifunctor as B
-import qualified Data.Bitraversable as B
-import Data.Profunctor (dimap)
-import Control.Category ((>>>))
+import qualified Control.Category as C
 
 import Pipes
 
@@ -106,7 +104,7 @@ downstream_second = second_from_first downstream_dimap downstream_first
 downstream_zip :: Functor m => Proxy a' a b1' b1 m v -> Proxy a' a b2' b2 m v -> Proxy a' a (b1', b2') (b1, b2) m v
 downstream_zip = rec
   where
-  rec    (Respond r1)   (Respond r2)    = Respond $ B.bimap r1 r2 >>> \case ((b1, r1), (b2, r2)) -> ((b1, b2), rec r1 r2)
+  rec    (Respond r1)   (Respond r2)    = Respond $ B.bimap r1 r2 C.>>> \case ((b1, r1), (b2, r2)) -> ((b1, b2), rec r1 r2)
   rec r1@(Respond _)    (Request a' r2) = Request a' $ rec r1 . r2
   rec r1@(Respond _)    (M mr)          = M $ rec r1 <$> mr
   rec    _              (Pure v)        = Pure v

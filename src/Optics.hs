@@ -3,8 +3,6 @@ module Optics where
 import Data.Coerce
 
 import Data.Profunctor
-import Data.Profunctor.Strong
-import Data.Profunctor.Choice
 import Data.Tuple
 
 type Optic p s t a b = p a b -> p s t

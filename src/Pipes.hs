@@ -90,6 +90,12 @@ connect    (Respond r) s                 = Respond $ (flip connect s <$>) . r
 connect    (M mr) s                      = M $ flip connect s <$> mr
 connect    (Pure v) _                    = Pure v
 
+(<<<) :: Functor m => Proxy b' b c' c m r -> Proxy a' a b' b m r -> Proxy a' a c' c m r
+(<<<) = connect
+
+(>>>) :: Functor m => Proxy a' a b' b m r -> Proxy b' b c' c m r -> Proxy a' a c' c m r
+(>>>) = flip (<<<)
+
 runEffect :: Monad m => Effect m r -> m r
 runEffect (Request r _) = absurd r
 runEffect (Respond cb ) = absurd . fst . cb $ ()

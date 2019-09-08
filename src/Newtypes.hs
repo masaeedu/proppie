@@ -38,6 +38,10 @@ instance Functor m => Strong (Downstream m v a a')
   where
   first' = coerce downstream_first
 
+instance Functor m => Semigroupal (Downstream m v a a')
+  where
+  zip = coerce downstream_zip
+
 instance MFunctor (Proxy b' a' a b)
   where
   mmap = coerce SYTC.mmap

@@ -76,8 +76,14 @@ type Effect = Proxy Void () () Void
 request :: a' -> Proxy a' a b' b m a
 request a' = Request a' Pure
 
+request_ :: Functor m => a' -> Proxy a' a b' b m ()
+request_ a' = () <$ request a'
+
 respond :: (b' -> b) -> Proxy a' a b' b m b'
 respond f = Respond $ \b' -> (f b', Pure b')
+
+respond_ :: Functor m => (b' -> b) -> Proxy a' a b' b m ()
+respond_ f = () <$ respond f
 
 connect :: Functor m => Proxy b' b c' c m r -> Proxy a' a b' b m r -> Proxy a' a c' c m r
 -- pair a request in the client with the next response in the server

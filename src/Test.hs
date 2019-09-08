@@ -20,7 +20,7 @@ client l = traverse_ go [0..l]
     mpure $ print res
 
 main :: IO ()
-main = runEffect $ (coerce $ flipped . _1 $ Downstream $ server) >>> client 10
+main = runEffect $ (coerce $ swapped . _1 $ Downstream $ server) >>> client 10
 {-
 *Test> main
 (0,0)

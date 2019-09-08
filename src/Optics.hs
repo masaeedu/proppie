@@ -13,8 +13,8 @@ type Optic p s t a b = p a b -> p s t
 type Iso s t a b = forall p. Profunctor p => Optic p s t a b
 type Iso' s a = Iso s s a a
 
-flipped :: Iso (a, b) (c, d) (b, a) (d, c)
-flipped = dimap swap swap
+swapped :: Iso (a, b) (c, d) (b, a) (d, c)
+swapped = dimap swap swap
 
 type Lens s t a b = forall p. Strong p => Optic p s t a b
 type Lens' s a = Lens s s a a

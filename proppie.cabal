@@ -1,5 +1,5 @@
 cabal-version:       >=1.10
-name:                newtypeproblems
+name:                proppie
 version:             0.1.0.0
 author:              Asad Saeeduddin
 maintainer:          masaeedu@gmail.com

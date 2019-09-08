@@ -2,27 +2,28 @@ module Test where
 
 import Data.Coerce
 
-import Pipes
-import Pipes.Core
+import Pipes (Proxy(..), Server', Client', Effect, request, respond, connect, runEffect)
 import Data.Foldable
 import Data.Functor.Identity
 import Control.Monad
+import Control.Applicative
 import Data.Profunctor
 import Data.Tuple
 
 import Optics
 import Newtypes
+import ExtraClasses
 
-server :: Monad m => Server a (Int, Int) m r
-server = forever $ respond (42, 42)
+server :: Functor m => Server' Int m r
+server = forever $ respond (* 2)
 
-server' :: Monad m => Server a Int m r
-server' = coerce $ reLens _1 $ Downstream $ server
+client :: Int -> Client' Int IO ()
+client i = replicateM_ 10 $ do
+  res <- request $ i
+  mpure $ print res
 
-client :: Client Int Int IO ()
-client = forever $ do
-  res <- request $ 42
-  liftIO $ print res
+effect :: Effect IO ()
+effect = connect (client 1) server
 
 main :: IO ()
-main = runEffect $ server' >>~ const client
+main = runEffect $ connect (client 1) server

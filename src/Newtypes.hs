@@ -37,9 +37,9 @@ instance (Monoid v, Functor m) => Choice (Downstream m v a a')
   where
   left' = coerce downstream_left
 
-instance Functor m => Costrong (Downstream m v a a')
+instance Functor m => Strong (Downstream m v a a')
   where
-  unfirst = coerce downstream_unfirst
+  first' = coerce downstream_first
 
 instance MFunctor (Proxy b' a' a b)
   where

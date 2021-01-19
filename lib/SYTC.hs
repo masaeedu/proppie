@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase, TupleSections #-}
 module SYTC where
 
 import Prelude as P

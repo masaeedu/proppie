@@ -1,22 +1,10 @@
 let
-  compilerVersion = "ghc865";
   sources = import ./nix/sources.nix;
-  pkgs = import sources.nixpkgs {};
-  hie = (import sources.all-hies {}).versions."${compilerVersion}";
+  compilerVersion = import ./compiler.nix;
+  hnix = import sources.iohk-hnix {};
+  pkgs = (import hnix.sources.nixpkgs) hnix.nixpkgsArgs;
 in
-
-with pkgs;
-
-let
-  hpkgs = haskell.packages."${compilerVersion}";
-  btools = [
-    hpkgs.cabal-install
-    hpkgs.ghcid
-    hpkgs.hoogle
-    hpkgs.stylish-cabal
-    hie
-  ];
-  modifier = drv: haskell.lib.addBuildTools drv btools;
-in
-
-hpkgs.developPackage { root = ./.; inherit modifier; returnShellEnv = false; }
+pkgs.haskell-nix.cabalProject {
+  src = pkgs.haskell-nix.haskellLib.cleanGit { src = ./.; };
+  compiler-nix-name = compilerVersion;
+}
